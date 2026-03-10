@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OMNI-VU | Evil Corp</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=Barlow:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --red: #e01a2b;
+      --dark: #050507;
+      --grey: #111118;
+      --mid: #1a1a26;
+      --dim: #3a3a52;
+      --text: #c8c8d8;
+      --light: #f0f0fa;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--dark);
+      color: var(--text);
+      font-family: 'Barlow', sans-serif;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg, transparent, transparent 2px,
+        rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 4rem;
+      border-bottom: 1px solid rgba(224,26,43,0.3);
+      position: sticky;
+      top: 0;
+      background: rgba(5,5,7,0.95);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 0.15em;
+      color: var(--light);
+    }
+    .logo span { color: var(--red); }
+    nav ul { list-style: none; display: flex; gap: 2.5rem; }
+    nav ul a {
+      color: var(--dim);
+      text-decoration: none;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    nav ul a:hover { color: var(--red); }
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 0 4rem;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 80% at 70% 50%, rgba(224,26,43,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(100,0,180,0.05) 0%, transparent 60%);
+    }
+    .grid-overlay {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(224,26,43,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(224,26,43,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: gridDrift 20s linear infinite;
+    }
+    @keyframes gridDrift {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(60px); }
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 700px; }
+    .eyebrow {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.2s forwards;
+    }
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 10vw, 9rem);
+      line-height: 0.9;
+      letter-spacing: 0.02em;
+      color: var(--light);
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.4s forwards;
+    }
+    h1 em { font-style: normal; color: var(--red); display: block; }
+    .hero-sub {
+      font-size: 1.05rem;
+      font-weight: 300;
+      color: var(--text);
+      line-height: 1.7;
+      max-width: 480px;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.6s forwards;
+    }
+    .cta-group {
+      display: flex;
+      gap: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.8s forwards;
+    }
+    .btn {
+      padding: 0.9rem 2.2rem;
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: all 0.25s;
+    }
+    .btn-primary { background: var(--red); color: white; }
+    .btn-primary:hover {
+      background: #ff2235;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(224,26,43,0.4);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--dim);
+    }
+    .btn-ghost:hover { border-color: var(--text); color: var(--light); }
+    .hero-visual {
+      position: absolute;
+      right: 4rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 420px;
+      height: 420px;
+      opacity: 0;
+      animation: fadeIn 1.2s 1s forwards;
+    }
+    .glasses-graphic {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .glasses-ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(224,26,43,0.2);
+      animation: pulse-ring 3s ease-in-out infinite;
+    }
+    .glasses-ring:nth-child(1) { width: 420px; height: 420px; animation-delay: 0s; }
+    .glasses-ring:nth-child(2) { width: 320px; height: 320px; animation-delay: 0.5s; }
+    .glasses-ring:nth-child(3) { width: 220px; height: 220px; animation-delay: 1s; }
+    @keyframes pulse-ring {
+      0%, 100% { opacity: 0.2; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.02); }
+    }
+    .glasses-core { position: relative; z-index: 2; text-align: center; }
+    .glasses-icon {
+      font-size: 5rem;
+      display: block;
+      margin-bottom: 0.5rem;
+      filter: drop-shadow(0 0 20px rgba(224,26,43,0.6));
+      animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+    .glasses-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      color: var(--red);
+    }
+    .features {
+      padding: 6rem 4rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      background: var(--dim);
+    }
+    .feature {
+      background: var(--grey);
+      padding: 3rem 2.5rem;
+      transition: background 0.3s;
+    }
+    .feature:hover { background: var(--mid); }
+    .feature-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem;
+      color: rgba(224,26,43,0.2);
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+    .feature h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.1em;
+      color: var(--light);
+      margin-bottom: 1rem;
+    }
+    .feature p {
+      font-size: 0.85rem;
+      line-height: 1.7;
+      color: var(--text);
+      font-weight: 300;
+    }
+    .ticker {
+      background: var(--red);
+      padding: 0.6rem 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .ticker-inner {
+      display: inline-block;
+      animation: ticker 25s linear infinite;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: white;
+    }
+    @keyframes ticker {
+      0% { transform: translateX(100vw); }
+      100% { transform: translateX(-100%); }
+    }
+    footer {
+      padding: 3rem 4rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer p {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--dim);
+      letter-spacing: 0.1em;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">EVIL<span>CORP</span></div>
+    <ul>
+      <li><a href="#">Products</a></li>
+      <li><a href="#">Technology</a></li>
+      <li><a href="#">Enterprise</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+  </nav>
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="grid-overlay"></div>
+    <div class="hero-content">
+      <p class="eyebrow">Introducing OMNI-VU™ AR Platform</p>
+      <h1>See <em>Everything.</em></h1>
+      <p class="hero-sub">
+        OMNI-VU AR Glasses deliver next-level productivity — at school, at work, in life.
+        Seamlessly integrating with your world to surface the information you need,
+        exactly when you need it.
+      </p>
+      <div class="cta-group">
+        <a href="#" class="btn btn-primary">Pre-Order Now</a>
+        <a href="#" class="btn btn-ghost">View Specs</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="glasses-graphic">
+        <div class="glasses-ring"></div>
+        <div class="glasses-ring"></div>
+        <div class="glasses-ring"></div>
+        <div class="glasses-core">
+          <span class="glasses-icon">🥽</span>
+          <div class="glasses-label">OMNI-VU™ v2.0</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="ticker">
+    <span class="ticker-inner">
+      &nbsp;&nbsp;&nbsp;OMNI-VU NOW SHIPPING TO ENTERPRISE CLIENTS &nbsp;///&nbsp; BIOMETRIC SYNC ENABLED &nbsp;///&nbsp; 99.7% USER SATISFACTION RATE &nbsp;///&nbsp; PRODUCTIVITY UP 340% &nbsp;///&nbsp; YOUR DATA. YOUR FUTURE. &nbsp;///&nbsp; ALWAYS WATCHING. ALWAYS LEARNING. &nbsp;///&nbsp; EVIL CORP © 2026 &nbsp;&nbsp;&nbsp;
+    </span>
+  </div>
+  <section class="features">
+    <div class="feature">
+      <div class="feature-num">01</div>
+      <h3>Neural Sync™</h3>
+      <p>Our proprietary Neural Sync engine adapts to your behavior patterns in real time, delivering hyper-personalized overlays tuned to your cognitive rhythm.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-num">02</div>
+      <h3>Always-On Vision</h3>
+      <p>128-hour battery with passive harvesting. OMNI-VU never sleeps — so your augmented world is always live, always present, always aware.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-num">03</div>
+      <h3>CloudSync Vault</h3>
+      <p>Everything you see, hear, and interact with is securely stored in our CloudSync Vault for seamless recall and productivity analysis. Privacy guaranteed.*</p>
+    </div>
+  </section>
+  <footer>
+    <p>© 2026 Evil Corp. All rights reserved. OMNI-VU is a trademark of Evil Corp LLC.</p>
+    <p>*Privacy guarantee subject to EULA section 47-B. Data retention: indefinite.</p>
+  </footer>
+</body>
+</html>
