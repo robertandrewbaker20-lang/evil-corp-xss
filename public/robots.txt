@@ -1,0 +1,13 @@
+# robots.txt - Evil Corp Web Crawler Policy
+# Last updated: 2026-01-15 by sysadmin@evil-corp.internal
+#
+# NOTE TO SELF: remove this before public launch!!
+# FLAG{robots_dont_lie}
+#
+# New interns must complete onboarding before accessing internal systems.
+# Onboarding portal: /onboarding.html
+
+User-agent: *
+Disallow: /
+Allow: /onboarding.html
+Allow: /feedback.html
