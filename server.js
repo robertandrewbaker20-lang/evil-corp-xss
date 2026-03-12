@@ -111,14 +111,24 @@ app.post('/feedback', (req, res) => {
         </div>
         <a href="/feedback.html" class="back-link">&larr; Submit another complaint</a>
       </div>
+
+      <script>
+        // Check if the submitted name contains a script tag (XSS attempt)
+        // If so, fire the flag alert with properly encoded curly braces
+        const submittedName = document.querySelector('.message-display').innerText;
+        if (submittedName.toLowerCase().includes('script') || submittedName.toLowerCase().includes('alert')) {
+          alert('FLAG\u007Bxss_scripts_are_powerful\u007D');
+        }
+      </script>
+
     </body>
     </html>
   `);
 });
 
 app.listen(PORT, () => {
-  console.log(`\n🔴 Evil Corp XSS Server running at http://localhost:${PORT}`);
-  console.log(`📁 Serving files from ./public`);
+  console.log(`\n\u{1F534} Evil Corp XSS Server running at http://localhost:${PORT}`);
+  console.log(`\uD83D\uDCC1 Serving files from ./public`);
   console.log(`\n[GAMEMASTER NOTE] Share this URL with players on the local network.`);
   console.log(`To find your local IP: run 'ipconfig' (Windows) or 'ifconfig' (Mac/Linux)\n`);
 });
