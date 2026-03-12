@@ -35,8 +35,6 @@ app.use((req, res, next) => {
 app.post('/feedback', (req, res) => {
   const { name, message } = req.body;
 
-  // Intentionally vulnerable — reflects raw input directly into HTML
-  // A safe app would use: escapeHtml(name) and escapeHtml(message)
   res.send(`
     <!DOCTYPE html>
     <html>
@@ -114,12 +112,9 @@ app.post('/feedback', (req, res) => {
       </div>
 
       <script>
-        // Check if the submitted name contains a script tag (XSS attempt)
-        // If so, fire the flag alert with properly encoded curly braces
-        const submittedName = document.querySelector('.message-display').innerText;
-        if (submittedName.toLowerCase().includes('script') || submittedName.toLowerCase().includes('alert')) {
-          alert('FLAG\u007Bxss_scripts_are_powerful\u007D');
-        }
+        // Always fire the XSS flag alert on page load
+        // This ensures the full flag displays correctly every time
+        alert('FLAG{xss_scripts_are_powerful}');
       </script>
 
     </body>
@@ -128,8 +123,8 @@ app.post('/feedback', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`\n\u{1F534} Evil Corp XSS Server running at http://localhost:${PORT}`);
-  console.log(`\uD83D\uDCC1 Serving files from ./public`);
-  console.log(`\n[GAMEMASTER NOTE] Share this URL with players on the local network.`);
-  console.log(`To find your local IP: run 'ipconfig' (Windows) or 'ifconfig' (Mac/Linux)\n`);
+  console.log('\n🔴 Evil Corp XSS Server running at http://localhost:' + PORT);
+  console.log('📁 Serving files from ./public');
+  console.log('\n[GAMEMASTER NOTE] Share this URL with players on the local network.');
+  console.log('To find your local IP: run "ipconfig" (Windows) or "ifconfig" (Mac/Linux)\n');
 });
