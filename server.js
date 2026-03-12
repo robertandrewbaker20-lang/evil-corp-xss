@@ -35,6 +35,21 @@ app.use((req, res, next) => {
 app.post('/feedback', (req, res) => {
   const { name, message } = req.body;
 
+  // Detect which payload the student used
+  const input = (name + ' ' + message).toLowerCase();
+  const isCookiePayload = input.includes('document.cookie');
+  const isXSSPayload = input.includes('<script>') || input.includes('<script ');
+
+  // Build the correct alert script based on what was submitted
+  let alertScript = '';
+  if (isCookiePayload) {
+    // Student used document.cookie payload — show cookie flag only
+    alertScript = `alert('FLAG{cookies_are_not_just_snacks}');`;
+  } else if (isXSSPayload) {
+    // Student used a script tag payload — show XSS flag only
+    alertScript = `alert('FLAG{xss_scripts_are_powerful}');`;
+  }
+
   res.send(`
     <!DOCTYPE html>
     <html>
@@ -112,9 +127,7 @@ app.post('/feedback', (req, res) => {
       </div>
 
       <script>
-        // Always fire the XSS flag alert on page load
-        // This ensures the full flag displays correctly every time
-        alert('FLAG{xss_scripts_are_powerful}');
+        ${alertScript}
       </script>
 
     </body>
