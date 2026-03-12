@@ -20,7 +20,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // =============================================
 app.use((req, res, next) => {
   res.cookie('secret', 'FLAG{cookies_are_not_just_snacks}', {
-    httpOnly: false  // Intentionally vulnerable — allows JS access
+    httpOnly: false,  // Intentionally vulnerable — allows JS access
+    encode: String    // Prevents URL-encoding so {} show correctly in popup
   });
   next();
 });
